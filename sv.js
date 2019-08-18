@@ -62,7 +62,7 @@
             data: function (params) {
                 var query = {
                     district: $districtSelect.val(),
-                    type: 'public'
+                    term: params.term
                 }
                 return query;
             },
@@ -102,17 +102,20 @@
     });
 
     $houseSelect.on('change.select2', function () {
-        var oikData = oikByUik[$houseSelect.select2('data')[0].uik];
-        console.log(oikData);
-        console.log(candidatesByOik[oikData.oik]);
+        var uik = $houseSelect.select2('data')[0].uik;
+        // var uik = oikByUik[$houseSelect.select2('data')[0].uik];
+        console.log('uik', uik);
+        var oikData = oikByUik[uik];
         drawCandidates(candidatesByOik[oikData.oik]);
+        drawVotePlace(votePlaces[uik]);
     });
 
     var $candidatesContainer = $('#sv-candidates');
 
     function drawCandidates(candidates) {
         var tpl = [
-            '<table>',
+            '<h3>Кандидаты</h3>',
+            '<table class="table">',
             '<tr>',
             '<th>Кандидат</th>',
             '<th>Партия</th>',
@@ -135,16 +138,24 @@
     var $votePlaceContainer = $('#sv-vote-place');
     function drawVotePlace(voitePlace) {
         var tpl = [
-            '<table>',
+            '<h3>Место голосования</h3>',
+            '<table class="table">',
             '<tr>',
             '<th>Муниципалитет</th>',
+            '<td>' + voitePlace.mo + '</td>',
+            '</tr><tr>',
             '<th>УИК</th>',
+            '<td>' + voitePlace.uik + '</td>',
+            '</tr><tr>',
             '<th>Адрес</th>',
+            '<td>' + voitePlace.address + '</td>',
+            '</tr><tr>',
             '<th>Место голосования</th>',
+            '<td>' + voitePlace.place + '</td>',
             '</tr>',
+            '</table>'
         ];
         
-        tpl.push('</table>');
         $votePlaceContainer.html(tpl.join(''));
     }
 })();
